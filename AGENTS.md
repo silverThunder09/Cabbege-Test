@@ -9,12 +9,14 @@
 
 ## 프로젝트 기준
 
+* 새 기능 구현 전 `docs/adr/README.md`의 열린 결정 목록을 확인한다. Proposed 상태에 해당하면 구현하지 않고 사용자에게 알린다.
 * 상세 설계가 필요할 때만 `docs/README.md`에서 관련 문서를 찾아 읽는다.
 * PR·이슈 초안은 `$git-pr <review|draft-pr|create-pr|issue> base=<branch>` 흐름을 사용한다.
 * 작업 트리 리뷰는 `/review`를 사용한다.
 * API prefix는 `/api`, WebSocket 연결 경로는 `/ws/chat`을 사용한다.
 * DB 스키마, 관계, 인덱스, 영속 enum 변경 시 `docs/ERD.md`를 갱신한다.
 * 외부 API의 경로, HTTP 메서드, 요청·응답 DTO, 오류 계약 변경 시 `docs/api.md`를 갱신한다.
+* 공개 API 추가·변경 시 `SecurityConfig`의 `permitAll` 설정과 `docs/api.md`의 인증 기준 표를 함께 갱신한다.
 * 여러 세션에 걸쳐 이어질 작업만 `docs/plans/{topic}.md`에 Goal, Decisions, Current Status, Next Step을 기록한다.
 
 ## 코드 원칙
