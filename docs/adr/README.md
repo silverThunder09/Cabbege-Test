@@ -8,12 +8,22 @@
 
 | 결정 | 상태 | 막는 작업 |
 |---|---|---|
-| 인증 방식, JWT 여부, Refresh Token 저장소, 로그인 토큰 형식 | Proposed | 로그인, 로그아웃, 인증 API |
 | 이미지 저장소(로컬/S3)와 업로드 API 분리 여부 | Proposed | 상품 이미지 업로드 |
 | 인기 검색어 집계 저장소(Redis 여부) | Proposed | 인기 검색어 조회 |
 | 경매 입찰 동시성 제어 방식 | Proposed | 입찰 |
 | WebSocket 확장 구조와 채팅 destination | Proposed | 채팅 실시간 |
 | 목록 조회 페이징 방식(Pageable/cursor) | Proposed | 목록 조회 API |
+
+## 확정된 결정
+
+| 결정 | 내용 |
+|---|---|
+| 인증 방식 | JWT |
+| Access Token | API 인증에 사용 |
+| Refresh Token 저장소 | Redis |
+| 로그인 응답 | `accessToken`, `refreshToken`, `tokenType`, `expiresIn` |
+| 토큰 재발급 API | `POST /api/auth/refresh` |
+| 로그아웃 | Redis의 Refresh Token 삭제 또는 무효화 |
 
 ## 형식
 

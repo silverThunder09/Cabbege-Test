@@ -16,6 +16,7 @@
 | 회원가입 | 인증 | POST | `/api/auth/signup` |
 | 로그인 | 인증 | POST | `/api/auth/login` |
 | 로그아웃 | 인증 | POST | `/api/auth/logout` |
+| 토큰 재발급 | 인증 | POST | `/api/auth/refresh` |
 | 내 정보 조회 | 마이 페이지 | GET | `/api/clients/me` |
 | 내 정보 수정 | 마이 페이지 | PATCH | `/api/clients/me` |
 | 회원 프로필 조회 | 마이 페이지 | GET | `/api/clients/{clientId}` |
@@ -73,8 +74,40 @@
 
 | 공개 API | 인증 필요 API |
 |---|---|
-| 상품 목록·상세, 카테고리, 회원 공개 프로필 | 내 정보, 상품 등록·수정·삭제, 좋아요, 문의 작성, 팔로우, 채팅, 리뷰, 입찰 |
+| 회원가입, 로그인, 토큰 재발급, 상품 목록·상세, 카테고리, 회원 공개 프로필 | 로그아웃, 내 정보, 상품 등록·수정·삭제, 좋아요, 문의 작성, 팔로우, 채팅, 리뷰, 입찰 |
+
+## 인증 응답
+
+### 로그인
+
+`POST /api/auth/login` 성공 응답은 Access Token과 Refresh Token을 함께 반환한다.
+
+```json
+{
+  "accessToken": "jwt-access-token",
+  "refreshToken": "jwt-refresh-token",
+  "tokenType": "Bearer",
+  "expiresIn": 3600
+}
+```
+
+### 토큰 재발급
+
+`POST /api/auth/refresh`는 Refresh Token을 검증하고 새 Access Token과 Refresh Token을 재발급한다.
+
+```json
+{
+  "accessToken": "jwt-access-token",
+  "refreshToken": "jwt-refresh-token",
+  "tokenType": "Bearer",
+  "expiresIn": 3600
+}
+```
+
+### 로그아웃
+
+`POST /api/auth/logout`은 인증된 사용자의 Refresh Token을 Redis에서 삭제하거나 무효화한다.
 
 ## 열린 결정
 
-- 로그인 토큰 형식, 채팅 WebSocket destination, 목록 페이징 방식, 이미지 업로드 API 분리는 [adr/README.md](adr/README.md)에서 관리한다.
+- 채팅 WebSocket destination, 목록 페이징 방식, 이미지 업로드 API 분리는 [adr/README.md](adr/README.md)에서 관리한다.

@@ -22,14 +22,9 @@
 | review | `.agents/skills/review/SKILL.md` | 변경사항 코드 리뷰 |
 | git-setup | `.agents/skills/git-setup/SKILL.md` | Git hook, PR·이슈 템플릿 셋업 |
 
-## 현재 설계 기준
+## 빠른 참조
 
-- API prefix는 `/api`다.
-- WebSocket 연결 경로는 `/ws/chat`이다.
-- DB 테이블명은 snake_case를 사용한다.
-- Entity는 API 응답으로 직접 반환하지 않는다.
-- ERD와 API가 바뀌면 같은 작업에서 문서를 함께 갱신한다.
-
-## 열린 결정
-
-- 확정 전 작업을 막는 결정은 [adr/README.md](adr/README.md)에서 관리한다.
+- API prefix: `/api`
+- WebSocket 연결 경로: `/ws/chat`
+- 구현 규칙: [convention.md](convention.md)
+- 확정 전 작업을 막는 결정: [adr/README.md](adr/README.md)
