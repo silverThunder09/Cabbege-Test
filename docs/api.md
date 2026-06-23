@@ -78,6 +78,39 @@
 
 ## 인증 응답
 
+### 회원가입
+
+`POST /api/auth/signup`은 이메일 중복을 검증하고 비밀번호를 해시로 저장한다.
+
+요청:
+
+```json
+{
+  "email": "client@example.com",
+  "password": "password123!",
+  "nickname": "배추판매자",
+  "name": "홍길동",
+  "phone": "010-1234-5678"
+}
+```
+
+성공 응답은 `201 Created`를 사용하고 password, phone은 포함하지 않는다.
+
+```json
+{
+  "id": 1,
+  "email": "client@example.com",
+  "nickname": "배추판매자",
+  "name": "홍길동",
+  "role": "USER",
+  "status": "ACTIVE",
+  "verified": false,
+  "createdAt": "2026-06-24T03:00:00"
+}
+```
+
+중복 이메일은 `409 Conflict`, 입력 검증 실패는 `400 Bad Request`로 응답한다.
+
 ### 로그인
 
 `POST /api/auth/login` 성공 응답은 Access Token과 Refresh Token을 함께 반환한다.
