@@ -19,7 +19,7 @@ description: |
 /rv base=<branch>
 ```
 
-기본값: `base` 없으면 `dev`, `dev` 없으면 `main`.
+기본값: `base` 없으면 `develop`, `develop` 없으면 `dev`, `dev` 없으면 `main`.
 
 ## 절차
 
@@ -32,6 +32,7 @@ git diff --stat <base>...HEAD
 ```
 
 변경된 도메인(auth, client, item, …)과 계층(controller, service, entity, dto, test)을 파악한다.
+관련 이슈 번호가 브랜치명이나 PR 본문에 있으면 이슈의 Scope, Acceptance Criteria, Notes의 ADR 참조 여부만 확인한다.
 
 ### 2단계 — diff 읽기
 
@@ -43,11 +44,11 @@ git diff --unified=10 <base>...HEAD -- <file>
 
 ### 3단계 — 문서 읽기 (조건부)
 
-`docs/adr/README.md`는 항상 읽는다. 나머지는 변경 범위에 해당할 때만 읽는다.
+변경 범위에 해당하는 문서만 읽는다. `docs/README.md`는 어떤 문서가 필요한지 모를 때만 인덱스로 사용한다.
 
 | 조건 | 읽을 문서 |
 |---|---|
-| 항상 | `docs/adr/README.md` |
+| 인증 방식·외부 연동·DB 구조·아키텍처 결정 변경 | `docs/adr/README.md` |
 | Entity·DB·migration 변경 | `docs/ERD.md` |
 | Controller·DTO·API 경로 변경 | `docs/api.md` |
 | 인증·권한·Security 설정 변경 | `docs/security.md` |
@@ -57,7 +58,7 @@ convention과 testing 필수 시나리오는 아래에 인라인되어 있으므
 
 ### 4단계 — ADR 열린 결정 확인
 
-`docs/adr/README.md`의 Proposed 항목과 변경 기능을 대조한다.  
+`docs/adr/README.md`를 읽은 경우에만 Proposed 항목과 변경 기능을 대조한다.
 Proposed 상태 결정에 해당하는 기능이 구현되어 있으면 **P1**으로 즉시 보고하고 리뷰를 중단한다.
 
 ### 5단계 — 문서 정합성 대조
@@ -150,6 +151,7 @@ diff를 기준으로 아래 항목을 확인한다. 별도 파일 읽기 없이 
 | P2 | 경매 동시성 문제, WebSocket 참여자 검증 누락 |
 | P3 | 필수 시나리오 테스트 누락 |
 | P3 | 테스트 실패 |
+| P3 | 테스트 메서드명이 의미 없는 영문명인 경우 |
 
 ## 출력 형식
 

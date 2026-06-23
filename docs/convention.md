@@ -7,6 +7,7 @@
 - 생성자 주입만 사용한다.
 - Lombok `@Data`를 Entity에 사용하지 않는다.
 - 의미 없는 축약어와 범용 이름 `Util`, `Manager`, `Data`를 남용하지 않는다.
+- 테스트 메서드명은 한글로 작성해 기대 동작을 바로 드러낸다.
 
 ## DTO와 예외
 
@@ -36,3 +37,4 @@
 - Entity 컬럼과 관계 변경 시 `docs/ERD.md`를 수정한다.
 - API path, method, 인증 기준 변경 시 `docs/api.md`를 수정한다.
 - 도메인 상태나 권한 규칙 변경 시 `docs/business-rules.md`를 수정한다.
+- 구현 중 이슈 내용을 문서에 반복해서 복사하지 않는다.

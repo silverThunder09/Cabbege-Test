@@ -11,6 +11,7 @@
 | [security.md](security.md) | 인증, 권한, 민감정보, WebSocket 보안 |
 | [testing.md](testing.md) | 테스트 범위와 필수 시나리오 |
 | [git-workflow.md](git-workflow.md) | 브랜치, 커밋, PR 기준 |
+| [feature-workflow.md](feature-workflow.md) | 이슈 기반 기능 구현 흐름 |
 | [adr/README.md](adr/README.md) | 중요한 기술 결정 기록 |
 | [plans/](plans/) | 장기 작업 진행 상태 |
 
