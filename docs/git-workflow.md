@@ -37,6 +37,8 @@ fix/signup-duplicate-email
 type(scope): subject
 ```
 
+`type`과 `scope`는 영문 소문자를 사용하고, `subject`는 한글 명사형 단답으로 작성한다.
+
 type:
 
 - `feat`: 기능 구현
@@ -49,6 +51,8 @@ type:
 원칙:
 
 - 한 커밋에는 한 목적만 담는다.
+- subject는 `구현`, `추가`, `수정`, `정리`, `삭제`, `분리`처럼 짧은 명사형으로 작성한다.
+- PR 제목 tag와 커밋 type은 같은 의미를 사용한다.
 - 이슈 범위 밖 작업은 같은 커밋에 넣지 않는다.
 - 공통 핸들러, 보안 설정, 새 의존성처럼 기능 구현을 위해 필요한 기반 변경은 별도 커밋으로 분리한다.
 - 이슈 범위 밖 기반 작업이 필요하면 먼저 사용자에게 알리고 별도 이슈 또는 별도 커밋으로 처리한다.
@@ -57,16 +61,27 @@ type:
 예시:
 
 ```text
-feat(auth): implement signup endpoint
-test(auth): add signup api tests
-docs(auth): document signup contract
-chore(build): add flyway boot integration
+feat(auth): 회원가입 API 구현
+test(auth): 회원가입 API 테스트 추가
+docs(auth): 회원가입 API 계약 정리
+chore(build): Flyway 설정 추가
 ```
 
 ## PR
 
 - 사용자 승인 없이 PR을 만들지 않는다.
 - PR base는 개발 기준 브랜치(`develop` 또는 `dev`)로 한다.
+- PR 제목은 `[type] 제목` 형식으로 작성한다.
+- PR 제목 tag는 `[feat]`, `[fix]`, `[refactor]`, `[docs]`, `[test]`, `[chore]` 중 하나만 사용한다.
+- PR 제목은 한글로 작성한다.
 - PR 본문에 관련 이슈를 `Closes #{issueNumber}`로 연결한다.
 - PR에는 구현 요약, 테스트 결과, 리뷰 결과, 범위 밖 변경 여부를 적는다.
 - 문서 변경이 불필요하면 PR 체크리스트에서 "문서 변경 불필요"를 선택한다.
+
+예시:
+
+```text
+[feat] 1:1 채팅 메시지 전송 기능 구현
+[fix] 회원가입 중복 이메일 검증 수정
+[docs] 커밋 컨벤션 정리
+```

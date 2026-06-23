@@ -48,7 +48,7 @@ git diff --unified=10 <base>...HEAD -- <file>
 
 | 조건 | 읽을 문서 |
 |---|---|
-| 인증 방식·외부 연동·DB 구조·아키텍처 결정 변경 | `docs/adr/README.md` |
+| 인증 방식 자체·Redis Refresh Token·외부 연동·아키텍처 결정 변경 | `docs/adr/README.md` |
 | Entity·DB·migration 변경 | `docs/ERD.md` |
 | Controller·DTO·API 경로 변경 | `docs/api.md` |
 | 인증·권한·Security 설정 변경 | `docs/security.md` |

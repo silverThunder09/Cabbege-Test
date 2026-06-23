@@ -12,7 +12,7 @@
 2. 같은 제목의 열린 이슈가 있는지 `gh issue list`로 확인한다.
 3. `.github/ISSUE_TEMPLATE/feature.yml`의 항목에 맞춰 이슈를 만든다.
 4. 이슈 본문에는 구현 브랜치명을 `feature/{issueNumber}-{topic}`으로 적는다.
-5. 인증 방식, Redis, 외부 연동, DB 구조, 아키텍처 결정이 관련되면 Notes에 `docs/adr/README.md`를 반드시 포함한다.
+5. 인증 방식 자체, Redis Refresh Token, 외부 연동, 아키텍처 결정이 관련되면 Notes에 `docs/adr/README.md`를 반드시 포함한다.
 
 이슈 본문에는 아래 항목만 둔다.
 
@@ -27,7 +27,7 @@
 
 1. 이슈 본문만 먼저 읽는다.
 2. 이슈 Notes에 적힌 관련 문서만 읽는다.
-3. Notes에 `docs/adr/README.md`가 있거나 인증 방식, Redis, 외부 연동, DB 구조, 아키텍처 결정이 관련되면 ADR을 반드시 확인한다.
+3. Notes에 `docs/adr/README.md`가 있거나 인증 방식 자체, Redis Refresh Token, 외부 연동, 아키텍처 결정이 관련되면 ADR을 확인한다.
 4. 개발 기준 브랜치(`develop` 또는 `dev`)에서 `feature/{issueNumber}-{topic}` 브랜치를 만든다.
 5. 이슈의 Scope와 Acceptance Criteria에 있는 항목만 구현한다.
 
@@ -42,9 +42,9 @@
 예시:
 
 ```text
-feat(auth): implement signup endpoint
-test(auth): add signup api tests
-chore(build): add flyway boot integration
+feat(auth): 회원가입 API 구현
+test(auth): 회원가입 API 테스트 추가
+chore(build): Flyway 설정 추가
 ```
 
 ## 문서 수정 기준
@@ -90,7 +90,8 @@ void 이미_가입된_이메일이면_회원가입에_실패한다() {
 
 - 이슈 생성 시 전체 docs를 읽지 않는다.
 - 구현 시작 시 이슈 본문과 Notes에 적힌 관련 문서의 관련 구간만 읽는다.
-- ADR은 Notes에 있거나 기술 결정과 관련된 기능일 때 반드시 읽는다.
+- ADR은 Notes에 있거나 기술 결정 자체와 관련된 기능일 때만 읽는다.
+- DB 스키마 변경은 ADR이 아니라 `docs/ERD.md`만 확인한다.
 - `docs/README.md`는 어떤 문서가 필요한지 모를 때만 인덱스로 사용한다.
 - 리뷰는 diff 기준으로만 수행한다.
 - 변경되지 않은 소스 파일 전체를 읽지 않는다.

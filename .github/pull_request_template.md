@@ -2,6 +2,11 @@
 
 - TBD
 
+## PR 제목 규칙
+
+- `[feat]`, `[fix]`, `[refactor]`, `[docs]`, `[test]`, `[chore]` 중 하나만 사용
+- 예: `[feat] 1:1 채팅 메시지 전송 기능 구현`
+
 ## 관련 이슈
 
 Closes #
