@@ -1,18 +1,27 @@
-# Architecture Decision Records
+# ADR
 
-중요한 기술 선택은 다음 형식의 ADR로 기록한다.
+중요한 기술 결정은 이 폴더에 기록한다.
+
+## 기록 대상
+
+- 인증 방식과 토큰 저장 전략
+- 이미지 저장소 선택
+- 인기 검색어 집계 저장소 선택
+- 경매 입찰 동시성 제어 방식
+- WebSocket 확장 구조
+
+## 형식
 
 ```text
-상태: Proposed | Accepted | Superseded
-배경
-결정
-검토한 대안
-장점과 단점
-결과와 후속 작업
+# ADR-{번호}: 제목
+
+## 상태
+
+Proposed | Accepted | Deprecated
+
+## 배경
+
+## 결정
+
+## 결과
 ```
-
-우선 작성할 ADR:
-
-1. `0001-item-purchase-lock.md`
-2. `0002-coupon-concurrency.md`
-3. `0003-payment-idempotency.md`

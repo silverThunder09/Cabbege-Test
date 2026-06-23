@@ -1,61 +1,199 @@
-# ERD 규칙
+# ERD
 
-## Entity
-
-| 도메인 | Entity |
-|---|---|
-| 회원 | Client |
-| 상품 | Category, Item, ItemImage, ItemLike |
-| 소셜·문의 | Follow, Inquiry, Review |
-| 채팅 | ChatRoom, ChatMember, ChatMessage |
-| 쿠폰 | Coupon, ClientCoupon |
-| 거래·결제 | Trade, Payment, PaymentWebhookEvent |
-
-## 핵심 관계
+## Mermaid
 
 ```mermaid
 erDiagram
-    CLIENT ||--o{ ITEM : sells
-    CATEGORY o|--o{ ITEM : classifies
-    ITEM ||--o{ ITEM_IMAGE : contains
-    CLIENT ||--o{ ITEM_LIKE : adds
-    ITEM ||--o{ ITEM_LIKE : receives
-    CLIENT ||--o{ FOLLOW : follows
-    CLIENT ||--o{ INQUIRY : writes
-    ITEM ||--o{ INQUIRY : receives
-    ITEM ||--o{ CHAT_ROOM : discussed_in
-    CHAT_ROOM ||--|{ CHAT_MEMBER : has
-    CLIENT ||--o{ CHAT_MEMBER : joins
-    CHAT_ROOM ||--o{ CHAT_MESSAGE : contains
-    COUPON ||--o{ CLIENT_COUPON : issues
-    CLIENT ||--o{ CLIENT_COUPON : owns
-    ITEM ||--o{ TRADE : traded_as
-    CLIENT ||--o{ TRADE : buys
-    CLIENT ||--o{ TRADE : sells
-    CLIENT_COUPON o|..o| TRADE : applied_to
-    TRADE ||--o{ PAYMENT : attempts
-    PAYMENT ||--o{ PAYMENT_WEBHOOK_EVENT : receives
-    TRADE ||--o| REVIEW : produces
+    direction LR
+
+    category ||--o{ item : classifies
+    itemImage }o--|| item : belongs_to
+    item ||--|{ itemLike : receives
+    itemLike }o--|| client : added_by
+    inquiry }o--|| item : belongs_to
+    inquiry }o--|| client : written_by
+    item }o--|| client : sold_by
+
+    client ||--o{ follow : follows
+    client ||--o{ follow : followed_by
+
+    client ||--o{ chatRoom : creates
+    item ||--o{ chatRoom : discussed_in
+    chatRoom ||--|{ chatMember : has
+    client ||--o{ chatMember : joins
+    chatRoom ||--o{ chatMessage : contains
+    client ||--o{ chatMessage : sends
+
+    client ||--o{ review : writes
+    client ||--o{ review : receives
+
+    item |o--|| auctionStatus : open
+    client ||--|| auctionStatus : bids
+
+    client["CLIENT"] {
+        bigint id PK
+        varchar email UK
+        varchar password
+        varchar nickname
+        varchar name
+        varchar phone
+        varchar profile_image_url
+        varchar role
+        varchar status
+        boolean is_verified
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    category["CATEGORY"] {
+        bigint id PK
+        bigint parent_id FK
+        varchar name UK
+        int sort_order
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    item["ITEM"] {
+        bigint id PK
+        bigint seller_id FK
+        bigint category_id FK
+        varchar trade_type
+        varchar title
+        text description
+        bigint initial_price
+        varchar condition_type
+        varchar trade_status
+        bigint view_count
+        bigint like_count
+        bigint inquiry_count
+        boolean is_draft
+        datetime created_at
+        datetime updated_at
+        boolean is_deleted
+    }
+
+    itemImage["ITEM_IMAGE"] {
+        bigint id PK
+        bigint item_id FK
+        varchar image_url
+        int sort_order
+        boolean is_thumbnail
+        datetime created_at
+    }
+
+    itemLike["ITEM_LIKE"] {
+        bigint client_id PK, FK
+        bigint item_id PK, FK
+        datetime created_at
+    }
+
+    inquiry["INQUIRY"] {
+        bigint id PK
+        bigint item_id FK
+        bigint author_id FK
+        text question
+        text answer
+        varchar status
+        datetime answered_at
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    follow["FOLLOW"] {
+        bigint follower_id PK, FK
+        bigint following_id PK, FK
+        datetime created_at
+    }
+
+    chatRoom["CHAT_ROOM"] {
+        bigint id PK
+        bigint item_id FK
+        bigint created_by FK
+        varchar status
+        datetime last_message_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    chatMember["CHAT_MEMBER"] {
+        bigint chat_room_id PK, FK
+        bigint client_id PK, FK
+        bigint last_read_message_id FK
+        datetime joined_at
+        datetime left_at
+    }
+
+    chatMessage["CHAT_MESSAGE"] {
+        bigint id PK
+        bigint chat_room_id FK
+        bigint sender_id FK
+        varchar message_type
+        text content
+        varchar image_url
+        datetime created_at
+        datetime deleted_at
+    }
+
+    review["REVIEW"] {
+        bigint id PK
+        bigint reviewer_id FK
+        bigint reviewee_id FK
+        int rating
+        text content
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    auctionStatus["AUCTION_STATUS"] {
+        bigint item_id PK, FK
+        bigint current_bid
+        bigint current_bidder_id FK
+        datetime close_date
+    }
 ```
 
-## 키와 제약
+## Entity 목록
 
-- ItemLike PK: `(client_id, item_id)`
-- Follow PK: `(follower_id, following_id)`
-- ChatMember PK: `(chat_room_id, client_id)`
-- ClientCoupon: `UNIQUE(coupon_id, client_id)`
-- Review: `UNIQUE(trade_id)`
-- Payment: `UNIQUE(merchant_uid)`, `UNIQUE(pg_payment_id)`
-- PaymentWebhookEvent: `UNIQUE(event_id)`
-
-## 삭제와 보존
-
-| 정책 | Entity |
+| 도메인 | Entity |
 |---|---|
-| Soft Delete `deleted_at` | Client, Item, Inquiry, Review, ChatMessage |
-| Hard Delete | ItemLike, Follow, ItemImage |
-| 영구 보존 | Trade, Payment, PaymentWebhookEvent |
+| 인증·회원 | Client |
+| 카테고리 | Category |
+| 상품 | Item, ItemImage, ItemLike, AuctionStatus |
+| 문의 | Inquiry |
+| 팔로우 | Follow |
+| 채팅 | ChatRoom, ChatMember, ChatMessage |
+| 리뷰 | Review |
 
-- Soft Delete Entity의 일반 조회는 삭제된 행을 제외한다.
-- `is_deleted`보다 삭제 시각을 확인할 수 있는 `deleted_at`을 사용한다.
-- DB 변경은 Flyway migration과 함께 이 문서를 갱신한다.
+## 주요 제약
+
+- `client.email`은 유일하다.
+- `category.name`은 유일하다.
+- `category.parent_id`는 `category.id`를 참조한다.
+- `item.seller_id`는 `client.id`를 참조한다.
+- `item.category_id`는 `category.id`를 참조한다.
+- `item_like` PK는 `(client_id, item_id)`다.
+- `follow` PK는 `(follower_id, following_id)`다.
+- `chat_member` PK는 `(chat_room_id, client_id)`다.
+- `auction_status.item_id`는 PK이자 `item.id` FK다.
+- `auction_status.current_bidder_id`는 현재 최고 입찰자 `client.id`를 참조하며 입찰 전에는 nullable일 수 있다.
+
+## 삭제 정책
+
+| Entity | 정책 |
+|---|---|
+| Client | Soft Delete, `deleted_at` |
+| Item | Soft Delete, `is_deleted` |
+| Inquiry | Soft Delete, `deleted_at` |
+| ChatMessage | Soft Delete, `deleted_at` |
+| Review | Soft Delete, `deleted_at` |
+| ItemImage | Hard Delete |
+| ItemLike | Hard Delete |
+| Follow | Hard Delete |
+| ChatMember | `left_at` 기록 |
+| Category | `is_active` 비활성화 |
+| AuctionStatus | Item 생명주기와 함께 관리 |

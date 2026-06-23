@@ -1,60 +1,139 @@
 ---
 name: git-pr
-description: 현재 브랜치 변경사항을 좁은 diff 기준으로 리뷰하고, PR 본문 또는 GitHub Issue 초안을 작성한다.
+description: |
+  현재 브랜치의 변경사항을 기준 브랜치와 비교해 PR 본문, GitHub Issue 초안,
+  또는 PR 생성 전 점검 결과를 작성한다. 사용자가 "PR 작성", "PR 본문",
+  "이슈 초안", "$git-pr"를 요청할 때 사용한다.
 ---
 
 # git-pr
 
-사용 목적:
+## 목적
 
-- `$git-pr review base=develop`
-- `$git-pr draft-pr base=develop`
-- `$git-pr create-pr base=develop`
-- `$git-pr issue type=feature`
+현재 브랜치의 변경사항을 좁은 diff 기준으로 파악하고, 바로 PR에 붙일 수 있는 본문 또는 이슈 초안을 만든다.
 
-## 명령 구분
+## 입력
 
-- `review`는 코드 리뷰만 수행하고 PR 본문 작성, PR 생성, Issue 생성을 하지 않는다.
-- `draft-pr`는 PR 본문 초안만 작성하고 PR을 생성하지 않는다.
-- `create-pr`는 사용자가 명시적으로 PR 생성을 요청한 경우에만 수행한다.
-- `issue`는 Issue 초안만 작성하고, 실제 생성은 별도 승인을 받은 경우에만 수행한다.
+명령 형식:
 
-## 먼저 읽기
-
-1. `AGENTS.md`
-2. `docs/git-workflow.md`
-3. 변경 파일이 특정 도메인 규칙을 필요로 할 때만 관련 docs
-
-## Diff 토큰 예산
-
-먼저 좁게 확인한다:
-
-```bash
-git merge-base <base> HEAD
-git diff --name-only <merge-base>...HEAD
-git diff --stat <merge-base>...HEAD
-git diff --check <merge-base>...HEAD
+```text
+$git-pr <review|draft-pr|create-pr|issue> base=<branch>
 ```
 
-그다음 변경 파일만 확인한다:
+기본값:
+
+- `base`가 없으면 `dev`를 우선 사용한다.
+- `dev`가 없으면 `main`을 사용한다.
+- mode가 없으면 `draft-pr`로 처리한다.
+
+## 절차
+
+1. 작업 상태를 확인한다.
 
 ```bash
-git diff --unified=10 <merge-base>...HEAD -- <changed-file>
+git status --short --branch
+git branch --show-current
 ```
 
-전체 파일 읽기와 저장소 전체 `rg` 검색은 피한다.
-필요하면 diff에 나온 클래스명 또는 메서드명만 제한 검색한다.
+2. 기준 브랜치가 있는지 확인한다.
 
-## 리뷰
+```bash
+git rev-parse --verify <base>
+```
 
-- 발견사항을 먼저 말하고 심각도 `[P1]`, `[P2]`, `[P3]`를 붙인다.
-- 구체적 위험, 파일 위치, 수정 방향을 함께 적는다.
-- 사용자가 수정을 요청하지 않으면 코드를 변경하지 않는다.
+3. 변경 범위를 확인한다.
 
-## PR / Issue
+```bash
+git diff --name-only <base>...HEAD
+git diff --stat <base>...HEAD
+git diff --check <base>...HEAD
+```
 
-- 목적을 한 문장으로 요약한다.
-- 사용자 영향, API/DB 영향, 내부 변경을 분리한다.
-- 실제 실행한 테스트만 적는다.
-- 위험, 롤백, 문서 영향을 포함한다.
-- 명시적 승인 없이 PR 또는 Issue를 생성하지 않는다.
+4. 변경 파일별 diff만 확인한다.
+
+```bash
+git diff --unified=10 <base>...HEAD -- <file>
+```
+
+5. 산출물을 작성한다.
+
+## mode별 산출물
+
+### review
+
+PR 생성 전 점검 결과를 작성한다.
+
+형식:
+
+```markdown
+## 점검 결과
+
+- 문제 없음 또는 발견 사항
+
+## 위험 요소
+
+- 위험 요소가 없으면 "없음"
+
+## 테스트
+
+- 실행한 명령
+- 실행하지 못한 경우 이유
+```
+
+### draft-pr
+
+PR 본문 초안을 작성한다.
+
+형식:
+
+```markdown
+## 변경 요약
+
+- 변경 내용을 적는다.
+
+## 변경 이유
+
+- 변경 이유를 적는다.
+
+## 주요 변경 파일
+
+- 주요 파일과 역할을 적는다.
+
+## 테스트
+
+- [ ] 실행한 테스트를 적는다.
+
+## 확인 필요
+
+- 리뷰어가 확인할 내용을 적는다.
+```
+
+### create-pr
+
+PR 본문 초안을 만든 뒤 사용자에게 PR 생성 승인을 요청한다.
+
+- 사용자 승인 없이 `gh pr create`, push를 실행하지 않는다.
+- 승인 전에는 제목, base, head, 본문을 먼저 보여준다.
+
+### issue
+
+GitHub Issue 초안을 작성한다.
+
+형식:
+
+```markdown
+## 배경
+
+## 작업 범위
+
+## 완료 조건
+
+## 참고 문서
+```
+
+## 주의
+
+- 변경되지 않은 소스 파일 전체를 읽지 않는다.
+- 긴 diff는 파일별 핵심만 요약한다.
+- 사용자 변경을 되돌리지 않는다.
+- 커밋, push, PR 생성은 사용자 승인 후에만 수행한다.

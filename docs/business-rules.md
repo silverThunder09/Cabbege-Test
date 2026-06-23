@@ -1,57 +1,78 @@
 # 비즈니스 규칙
 
+## 회원
+
+- Client는 계정 주체다.
+- `email`은 유일해야 한다.
+- `password`는 평문 저장을 금지하고 해시로 저장한다.
+- `role`은 권한, `status`는 계정 상태를 표현한다.
+- `is_verified`는 인증 완료 여부다.
+- 탈퇴 회원은 `deleted_at`을 기록하고 일반 조회에서 제외한다.
+
+## 카테고리
+
+- Category는 자기 참조 `parent_id`로 계층을 표현한다.
+- `name`은 유일하다.
+- 삭제 대신 `is_active = false`로 비활성화한다.
+- 목록 조회는 `sort_order`를 우선한다.
+
 ## 상품
 
-- `Item`은 판매 게시글이자 거래 대상 단일 상품이다.
-- 상태는 `DRAFT`, `ON_SALE`, `RESERVED`, `SOLD`다.
-- 임시저장은 별도 테이블 없이 `DRAFT`로 처리한다.
-- 게시 시 제목, 카테고리, 가격, 상품 상태, 설명, 이미지 최소 1장을 검증한다.
-- 이미지는 최대 10장이며 대표 이미지는 하나다.
+- Item은 회원이 판매하는 게시글이다.
+- `seller_id`는 판매자 Client를 참조한다.
+- `trade_type`은 일반 거래와 경매 등 거래 방식을 표현한다.
+- `trade_status`는 판매 진행 상태를 표현한다.
+- `is_draft = true`인 상품은 임시저장 상태다.
+- 삭제는 `is_deleted = true`로 처리한다.
+- `view_count`, `like_count`, `inquiry_count`는 조회 성능을 위한 카운트 컬럼이다.
 
-```text
-DRAFT -> ON_SALE -> RESERVED -> SOLD
-                    -> ON_SALE  결제 실패·취소·만료
-```
+## 이미지
 
-## 관심상품·팔로우·문의
+- ItemImage는 Item에 속한다.
+- `sort_order`로 노출 순서를 정한다.
+- `is_thumbnail = true`인 이미지는 상품 대표 이미지다.
+- 상품별 대표 이미지는 하나만 허용한다.
 
-- ItemLike와 Follow는 복합키로 중복을 차단하고 해제 시 Hard Delete한다.
-- Inquiry는 공개 Q&A이고 Chat은 비공개 거래 협의다.
-- 판매자만 자신의 상품 문의에 답변할 수 있다.
+## 좋아요
+
+- ItemLike는 `(client_id, item_id)` 복합키로 중복을 막는다.
+- 좋아요 추가·취소 시 `item.like_count`를 함께 갱신한다.
+- 삭제는 Hard Delete다.
+
+## 문의
+
+- Inquiry는 상품에 대한 공개 문의다.
+- 작성자는 `author_id`로 기록한다.
+- 답변은 판매자만 등록, 수정, 삭제할 수 있다.
+- 문의 삭제는 `deleted_at`으로 처리한다.
+
+## 팔로우
+
+- Follow는 `(follower_id, following_id)` 복합키로 중복을 막는다.
+- 자기 자신 팔로우는 허용하지 않는다.
+- 팔로우 취소는 Hard Delete다.
 
 ## 채팅
 
-- 같은 상품·구매자·판매자 조합의 활성 채팅방은 하나만 사용한다.
-- Client는 계정이고 ChatMember는 특정 방의 참여 기록이다.
-- 참여자만 방 조회, 구독, 메시지 전송이 가능하다.
-- 메시지는 ID 기반 커서 페이징을 사용한다.
+- ChatRoom은 특정 Item을 기준으로 생성된다.
+- `created_by`는 채팅방 생성자다.
+- ChatMember는 참여자와 읽음 위치를 관리한다.
+- 채팅방 나가기는 `left_at`을 기록한다.
+- ChatMessage는 텍스트 또는 이미지 메시지를 표현한다.
+- 메시지 삭제는 `deleted_at`으로 처리한다.
 
-## 선착순 쿠폰
+## 리뷰
 
-- 기본 쿠폰: 3만 원 이상 구매 시 3천 원 할인, 100장, 1인 1장, 발급 후 7일.
-- Coupon은 정책, ClientCoupon은 회원에게 발급된 쿠폰이다.
-- Coupon 상태: `READY`, `ACTIVE`, `EXHAUSTED`, `EXPIRED`.
-- ClientCoupon 상태: `ISSUED`, `USED`, `EXPIRED`.
-- Redis 원자 연산 또는 합의된 락 전략으로 수량을 제어한다.
-- DB `UNIQUE(coupon_id, client_id)`를 최종 중복 방어선으로 사용한다.
+- Review는 작성자 `reviewer_id`와 대상자 `reviewee_id`를 가진다.
+- `rating`은 점수, `content`는 후기 내용이다.
+- 리뷰 수정은 작성자만 가능하다.
+- 리뷰 삭제는 `deleted_at`으로 처리한다.
 
-## 거래와 결제
+## 경매
 
-- 단일 중고 상품 거래이므로 `Order`가 아닌 `Trade`를 사용한다.
-- 거래 방식은 `DIRECT`, `DELIVERY`다.
-- 주소, 배송사, 송장번호는 저장하지 않고 채팅에서 협의한다.
-- Trade 상태: `PAYMENT_PENDING`, `IN_PROGRESS`, `COMPLETED`, `CANCELED`.
-- Payment 상태: `READY`, `PAID`, `FAILED`, `CANCELED`.
-- 서버가 상품을 잠그고 `ON_SALE`인지 재확인한 뒤 거래를 생성한다.
-- 결제 금액은 서버가 상품 가격과 쿠폰으로 다시 계산한다.
-- PortOne 서버 API로 paymentId, 결제 상태, 결제 금액을 확인한다.
-- 한 Trade에서 결제 재시도가 가능하므로 Trade와 Payment는 1:N이다.
-- 실패·취소·만료 시 Trade, Item, ClientCoupon 상태를 복구한다.
-- 완료된 Trade의 구매자만 판매자 후기를 한 번 작성할 수 있다.
-
-## 멱등성과 동시성
-
-- 상품당 활성 Trade는 하나만 허용한다.
-- Trade당 성공 Payment는 하나만 허용한다.
-- `merchant_uid`, `pg_payment_id`, 웹훅 `event_id`는 유일해야 한다.
-- 상품 구매 락과 쿠폰 발급 전략은 각각 ADR로 기록한다.
+- AuctionStatus는 Item과 1:1이다.
+- `current_bid`는 현재 최고 입찰가다.
+- `current_bidder_id`는 현재 최고 입찰자다.
+- 입찰가는 현재가보다 높아야 한다.
+- `close_date` 이후 입찰은 거절한다.
+- 입찰 동시성 제어 방식은 구현 전 확정한다.
