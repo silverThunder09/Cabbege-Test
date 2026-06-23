@@ -19,7 +19,7 @@ description: |
 $git-pr <review|draft-pr|create-pr|issue> base=<branch>
 ```
 
-기본값: `base` 없으면 `dev`, `dev` 없으면 `main`. mode 없으면 `draft-pr`.
+기본값: `base` 없으면 `develop`, `develop` 없으면 `dev`, `dev` 없으면 `main`. mode 없으면 `draft-pr`.
 
 ## 절차
 
@@ -30,6 +30,9 @@ git status --short --branch
 git diff --name-only <base>...HEAD
 git diff --stat <base>...HEAD
 ```
+
+관련 이슈가 있으면 `gh issue view <number>`로 Goal, Scope, Acceptance Criteria만 확인한다.
+기술 결정과 관련된 기능이면 Notes의 `docs/adr/README.md` 포함 여부도 확인한다.
 
 ### 2단계 — diff 읽기
 
@@ -66,6 +69,8 @@ mode에 따라 아래 형식으로 작성한다.
 ```markdown
 ## 변경 요약
 
+Closes #이슈번호
+
 ## 변경 이유
 
 ## 주요 변경 파일
@@ -80,6 +85,10 @@ mode에 따라 아래 형식으로 작성한다.
 ## 확인 필요
 
 - 리뷰어가 볼 내용
+
+## 범위 밖 변경
+
+- 없으면 "없음"
 ```
 
 ### create-pr — PR 생성
@@ -89,17 +98,21 @@ PR 본문 초안(draft-pr 형식)을 먼저 보여주고 사용자 승인을 받
 
 ### issue — GitHub Issue 초안
 
+`.github/ISSUE_TEMPLATE/feature.yml` 구조에 맞춰 아래 항목만 작성한다.
+인증 방식, Redis, 외부 연동, DB 구조, 아키텍처 결정이 관련되면 Notes에 `docs/adr/README.md`를 반드시 포함한다.
+
 ```markdown
-## 배경
+## Goal
 
-## 작업 범위
+## Scope
 
-## 완료 조건
+## Acceptance Criteria
 
-## 참고 문서
+## Notes
 ```
 
 ## 주의
 
 - 사용자 승인 없이 커밋, push, PR 생성, 병합을 실행하지 않는다.
 - 변경되지 않은 소스 파일 전체를 읽지 않는다.
+- PR 본문에는 관련 이슈와 테스트 결과를 포함한다.

@@ -29,4 +29,4 @@ body:
     id: notes
     attributes:
       label: Notes
-      description: API, DB, 보안, 테스트 참고사항
+      description: API, DB, 보안, ADR, 테스트 참고사항
