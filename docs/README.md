@@ -1,0 +1,37 @@
+# 배추마켓 문서 인덱스
+
+| 문서 | 책임 |
+|---|---|
+| [product-overview.md](product-overview.md) | 서비스 목표, 사용자, 기능 범위 |
+| [architecture.md](architecture.md) | 기술 스택, 계층, 패키지 기준 |
+| [ERD.md](ERD.md) | Entity, 컬럼, 관계, 삭제 정책 |
+| [api.md](api.md) | REST API와 WebSocket 경로 |
+| [business-rules.md](business-rules.md) | 도메인 규칙과 상태 기준 |
+| [convention.md](convention.md) | Java, Spring, JPA 구현 규칙 |
+| [security.md](security.md) | 인증, 권한, 민감정보, WebSocket 보안 |
+| [testing.md](testing.md) | 테스트 범위와 필수 시나리오 |
+| [git-workflow.md](git-workflow.md) | 브랜치, 커밋, PR 기준 |
+| [adr/README.md](adr/README.md) | 중요한 기술 결정 기록 |
+| [plans/](plans/) | 장기 작업 진행 상태 |
+
+## 로컬 스킬
+
+| 스킬 | 경로 | 용도 |
+|---|---|---|
+| git-pr | `.agents/skills/git-pr/SKILL.md` | PR 본문, 이슈 초안, PR 전 점검 |
+| review | `.agents/skills/review/SKILL.md` | 변경사항 코드 리뷰 |
+
+## 현재 설계 기준
+
+- API prefix는 `/api`다.
+- WebSocket 연결 경로는 `/ws/chat`이다.
+- DB 테이블명은 snake_case를 사용한다.
+- Entity는 API 응답으로 직접 반환하지 않는다.
+- ERD와 API가 바뀌면 같은 작업에서 문서를 함께 갱신한다.
+
+## 미정 항목
+
+- JWT 상세 구조와 Refresh Token 저장소
+- 이미지 저장소: 로컬, S3 중 선택
+- 검색어 인기 집계 저장소: Redis 도입 여부
+- 경매 입찰 동시성 제어 방식
