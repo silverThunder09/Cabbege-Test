@@ -1,0 +1,17 @@
+# AGENTS.md
+- 한국어 존댓말을 사용하고 사용자를 `형님` 또는 `은기형님`으로 부른다.
+- 결론부터 짧게 말한다.
+- 작업 전 브랜치와 작업 트리를 확인하고 사용자 변경을 덮어쓰지 않는다.
+- 상세 규칙은 `docs/README.md`에서 찾고, 필요한 문서만 읽는다.
+- Controller는 요청 검증, 인증 사용자 전달, DTO 변환만 담당한다.
+- 비즈니스 규칙은 Service 또는 Domain 메서드에 둔다.
+- Entity를 API 응답으로 직접 반환하지 않는다.
+- 생성자 주입만 사용한다.
+- 결제·인증·권한 변경은 관련 테스트를 실행한다.
+- PR·리뷰·이슈 초안은 `$git-pr <review|draft-pr|create-pr|issue> base=<branch>` 흐름을 사용한다.
+- 저장소 셋업은 `$git-setup <hooks|pr-template|issue-template>` 흐름을 사용한다.
+- 리뷰는 `git diff --name-only`, `--stat`, `--check` 후 파일별 `--unified=10` diff만 확인한다.
+- 변경되지 않은 소스 파일을 전체로 읽거나 저장소 전체 검색하지 않는다.
+- 긴 작업은 `docs/plans/{topic}.md`에 Goal, Decisions, Current Status, Next Step만 남긴다.
+- 사용자 승인 없이 브랜치, 커밋, push, PR, 병합, 배포를 수행하지 않는다.
+- 진단·리뷰 요청에서는 명시적 수정 요청 없이 코드를 변경하지 않는다.
