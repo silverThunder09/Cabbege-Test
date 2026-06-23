@@ -20,6 +20,7 @@
 |---|---|---|
 | git-pr | `.agents/skills/git-pr/SKILL.md` | PR 본문, 이슈 초안, PR 전 점검 |
 | review | `.agents/skills/review/SKILL.md` | 변경사항 코드 리뷰 |
+| git-setup | `.agents/skills/git-setup/SKILL.md` | Git hook, PR·이슈 템플릿 셋업 |
 
 ## 현재 설계 기준
 
@@ -29,9 +30,6 @@
 - Entity는 API 응답으로 직접 반환하지 않는다.
 - ERD와 API가 바뀌면 같은 작업에서 문서를 함께 갱신한다.
 
-## 미정 항목
+## 열린 결정
 
-- JWT 상세 구조와 Refresh Token 저장소
-- 이미지 저장소: 로컬, S3 중 선택
-- 검색어 인기 집계 저장소: Redis 도입 여부
-- 경매 입찰 동시성 제어 방식
+- 확정 전 작업을 막는 결정은 [adr/README.md](adr/README.md)에서 관리한다.
