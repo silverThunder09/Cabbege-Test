@@ -141,6 +141,48 @@
 
 `POST /api/auth/logout`은 인증된 사용자의 Refresh Token을 Redis에서 삭제하거나 무효화한다.
 
+## 상품 게시글
+
+### 상품 등록
+
+`POST /api/items`는 인증된 회원이 판매 상품을 등록한다.
+
+요청:
+
+```json
+{
+  "categoryId": 1,
+  "tradeType": "SALE",
+  "title": "싱싱한 배추",
+  "description": "오늘 수확한 배추입니다.",
+  "initialPrice": 12000,
+  "conditionType": "NEW"
+}
+```
+
+성공 응답은 `201 Created`를 사용한다.
+
+```json
+{
+  "id": 1,
+  "sellerId": 1,
+  "categoryId": 1,
+  "tradeType": "SALE",
+  "title": "싱싱한 배추",
+  "description": "오늘 수확한 배추입니다.",
+  "initialPrice": 12000,
+  "conditionType": "NEW",
+  "tradeStatus": "ON_SALE",
+  "viewCount": 0,
+  "likeCount": 0,
+  "inquiryCount": 0,
+  "isDraft": false,
+  "createdAt": "2026-06-24T04:00:00"
+}
+```
+
+존재하지 않는 카테고리는 `404 Not Found`, 입력 검증 실패는 `400 Bad Request`로 응답한다.
+
 ## 열린 결정
 
 - 채팅 WebSocket destination, 목록 페이징 방식, 이미지 업로드 API 분리는 [adr/README.md](adr/README.md)에서 관리한다.
