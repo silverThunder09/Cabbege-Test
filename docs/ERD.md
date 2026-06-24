@@ -166,10 +166,10 @@ erDiagram
 | auth/membership | Client                                   |
 | categories      | Category                                 |
 | Items           | Item, ItemImage, ItemLike, AuctionStatus |
-| Inquires        | InquiryLog                               |
+| Inquiries       | InquiryLog                               |
 | Follow          | Follow                                   |
 | chat            | ChatRoom, ChatMember, ChatMessage        |
-| reveiws         | Review                                   |
+| reviews         | Review                                   |
 
 ## Main Constraints
 
@@ -182,10 +182,9 @@ erDiagram
 - `inquiry_log.target_inquiry_id` refers `inquiry_log.id` and the `inquiry_log.target_inquiry_id` value of the tuple can be null.
 - The `contents` request field of the inquiry API is stored in `inquiry_log.description`.
 - The Primary Key of `follow` is `(follower_id, following_id)`.
-- `chat_member` PK는 `(chat_room_id, client_id)`다.
 - The Primary Key of `chat_member` is `(chat_room_id, client_id)`.
 - `auction_status.item_id` is both the PK and FK to `item.id`.
-- `acution_status.current_bidder_id` is a `client.id` that refers to the current highest bidder and can be nullable before any bids are placed.
+- `auction_status.current_bidder_id` is a `client.id` that refers to the current highest bidder and can be nullable before any bids are placed.
 
 ## Deletion policies
 
