@@ -1,5 +1,5 @@
 # AGENTS.md
-* 
+
 * Check branches and working trees using `git status --short --branch` before working on code, configuration, documentation, or any Git work.
 * Do not overwrite or revert any works already pushed into develop and main branches unless it is really necessary to do so.
 * Do not perform commits, pushes, create PRs, merges, or deployments without any approval.
@@ -16,7 +16,8 @@
 * Use the `$git-pr <draft-pr|create-pr|issue> base=<branch>` flow for PR and issue drafts.
 * Use `/review` for working trees reviews.
 * About API endpoints, Use `/api` for API prefixes and `/ws/chat` for WebSocket connection paths.
-* Update `docs/ERD.md` when DB schemas, relationships, indexes, or persistent enums are changed. * Update `docs/api.md` when changing the path, HTTP method, request/response DTO, or error contract of an third parties API.
+* Update `docs/ERD.md` when DB schemas, relationships, indexes, or persistent enums are changed.
+* Update `docs/api.md` when changing the path, HTTP method, request/response DTO, or error contract of third parties APIs.
 * When adding or changing a API specs, update the `permitAll` setting in `SecurityConfig` and the authentication criteria table in `docs/api.md` together.
 * Record the Goal, Decisions, Current Status, and Next Step in `docs/plans/{topic}.md` only for tasks that will span multiple sessions.
 
