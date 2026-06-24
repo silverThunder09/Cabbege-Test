@@ -48,8 +48,6 @@
 | 나를 팔로우한 회원 목록 | 팔로우 | GET | `/api/clients/me/followers` |
 | 채팅방 생성 | 채팅 | POST | `/api/items/{itemId}/chat-rooms` |
 | 채팅방 조회 | 채팅 | GET | `/api/chat-rooms` |
-| 내 채팅방 목록 | 채팅 | GET | `/api/chat-rooms` |
-| 채팅방 상세 조회 | 채팅 | GET | `/api/chat-rooms/{chatRoomId}` |
 | 채팅방 나가기 | 채팅 | POST | `/api/chat-rooms/{chatRoomId}/leave` |
 | 메시지 목록 조회 | 채팅 | GET | `/api/chat-rooms/{chatRoomId}/messages` |
 | 메시지 전송 | 채팅 | WS | `/api/chat-rooms/{chatRoomId}/messages` |
@@ -239,8 +237,6 @@ Notion `DB` 페이지의 API 명세 데이터베이스를 기준으로 정리한
 |---|---:|---|---|---|---|
 | 채팅방 생성 | POST | `/api/items/{itemId}/chat-rooms` | 필요 | Path `itemId` | `201 Created` |
 | 채팅방 조회 | GET | `/api/chat-rooms` | 필요 | 페이징 | `200 OK` |
-| 내 채팅방 목록 | GET | `/api/chat-rooms` | 필요 | 페이징 | `200 OK` |
-| 채팅방 상세 조회 | GET | `/api/chat-rooms/{chatRoomId}` | 필요 | Path `chatRoomId` | `200 OK` |
 | 채팅방 나가기 | POST | `/api/chat-rooms/{chatRoomId}/leave` | 필요 | Path `chatRoomId` | `200 OK` |
 | 메시지 목록 조회 | GET | `/api/chat-rooms/{chatRoomId}/messages` | 필요 | Path `chatRoomId`, 페이징 | `200 OK` |
 | 메시지 전송 | WS | `/api/chat-rooms/{chatRoomId}/messages` | 필요 | `content` | 브로드캐스트 |
