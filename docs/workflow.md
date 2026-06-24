@@ -85,9 +85,9 @@ docs/erd-update
 기능이 컴파일되기 위한 최소 기반 코드는 허용하되, 기능 커밋과 분리한다.
 
 ```text
-feat(auth): 회원가입 API 구현
-test(auth): 회원가입 API 테스트 추가
-chore(build): Flyway 설정 추가    ← 기반 변경은 별도 커밋
+feat: 회원가입 API 구현
+test: 회원가입 API 테스트 추가
+chore: Flyway 설정 추가    ← 기반 변경은 별도 커밋
 ```
 
 범위 밖 기반 변경이 승인되지 않으면 stash 또는 별도 브랜치로 분리하고 기능 PR에 포함하지 않는다.
@@ -99,7 +99,7 @@ chore(build): Flyway 설정 추가    ← 기반 변경은 별도 커밋
 형식:
 
 ```text
-type(scope): subject
+type: subject
 ```
 
 | type | 용도 |
@@ -113,17 +113,17 @@ type(scope): subject
 
 규칙:
 
-- `type`과 `scope`는 영문 소문자.
+- `type`은 영문 소문자.
 - `subject`는 한글 명사형 단답 (`구현`, `추가`, `수정`, `삭제`, `분리`).
 - 한 커밋에 한 목적만 담는다.
-- PR 제목 tag와 커밋 type은 일치한다.
+- PR 제목과 커밋 type은 일치한다.
 - 이슈 범위 밖 작업을 같은 커밋에 넣지 않는다.
 
 ```text
-feat(auth): 회원가입 API 구현
-test(auth): 회원가입 이메일 중복 검증 테스트 추가
-docs(api): 회원가입 응답 DTO 계약 정리
-chore(build): H2 테스트 의존성 추가
+feat: 회원가입 API 구현
+test: 회원가입 이메일 중복 검증 테스트 추가
+docs: 회원가입 응답 DTO 계약 정리
+chore: H2 테스트 의존성 추가
 ```
 
 ---
@@ -170,14 +170,14 @@ void 미인증_상태에서_상품_등록_요청은_401을_반환한다() { }
 1. 구현 후 `/review base=<develop|dev>`를 실행한다.
 2. P1·P2 문제가 있으면 수정 후 다시 리뷰한다. PR을 먼저 만들지 않는다.
 3. 테스트 통과 확인 후 `$git-pr create-pr base=<develop|dev>`로 PR 본문을 만든다.
-4. PR 제목 형식: `[type] 한글 제목` — tag는 `feat`, `fix`, `refactor`, `docs`, `test`, `chore` 중 하나.
+4. PR 제목 형식: `type: 한글 제목` — type은 `feat`, `fix`, `refactor`, `docs`, `test`, `chore` 중 하나.
 5. PR 본문에 `Closes #{issueNumber}` 포함.
 6. PR 본문에 구현 요약, 테스트 결과, 리뷰 결과, 범위 밖 변경 여부를 적는다.
 
 ```text
-[feat] 회원가입 API 구현
-[fix] 회원가입 중복 이메일 검증 수정
-[docs] ERD 커럼 누락 정리
+feat: 회원가입 API 구현
+fix: 회원가입 중복 이메일 검증 수정
+docs: ERD 컬럼 누락 정리
 ```
 
 ---

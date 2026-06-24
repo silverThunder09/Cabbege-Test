@@ -78,8 +78,8 @@ Closes #이슈번호
 
 PR 본문 초안(draft-pr 형식)을 먼저 보여주고 사용자 승인을 받은 뒤에만 `gh pr create`를 실행한다.  
 승인 전에는 제목, base, head, 본문을 표시한다.
-PR 제목은 `[feat]`, `[fix]`, `[refactor]`, `[docs]`, `[test]`, `[chore]` 중 하나를 사용해 `[type] 한글 제목`으로 작성한다.
-예: `[feat] 1:1 채팅 메시지 전송 기능 구현`
+PR 제목은 `feat`, `fix`, `refactor`, `docs`, `test`, `chore` 중 하나를 사용해 `type: 한글 제목`으로 작성한다.
+예: `feat: 1:1 채팅 메시지 전송 기능 구현`
 
 ### issue — GitHub Issue 초안
 
