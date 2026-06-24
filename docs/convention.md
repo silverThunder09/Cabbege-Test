@@ -6,14 +6,15 @@
 
 ## 기술 스택
 
-Java 17 / Spring Boot 4.1.x / Spring MVC / Spring WebSocket / Spring Security / Spring Data JPA / MySQL / Gradle
+Java 17 / Spring Boot 4.1.x / Spring MVC / Spring WebSocket / Spring Security / Spring Data JPA / QueryDSL / MySQL / Redis / Gradle
 
 ---
 
 ## 패키지 구조
 
 ```text
-com.sparta.cabbagetest
+src/main/java/com/example/cabbagemarket10
+├── CabbageTestApplication.java
 ├── domain
 │   ├── auth          # 로그인, 토큰 발급
 │   ├── client        # 회원, 마이페이지, 팔로우
@@ -33,15 +34,16 @@ com.sparta.cabbagetest
     └── common        # 공통 응답, 유틸
 ```
 
-각 도메인은 필요에 따라 `controller`, `service`, `repository`, `entity`, `dto` 하위 패키지를 둔다.
+각 도메인은 `com.example.cabbagemarket10.domain.{domain}` 아래에 두고, 필요에 따라 `controller`, `service`, `repository`, `domain`, `exception`, `dto` 하위 패키지를 둔다.
 Controller와 직접 통신하는 DTO는 `dto/request`, `dto/response`로 분리한다.
 
 ```text
-{domain}
+domain/{domain}
 ├── controller
 ├── service
 ├── repository
-├── entity
+├── domain
+├── exception
 └── dto
     ├── request
     └── response
@@ -71,8 +73,9 @@ Controller → WebSocket Handler → Service → Repository → DB
 
 - Service 메서드는 하나의 유스케이스를 표현한다.
 - Controller에 비즈니스 로직을 두지 않는다.
-- Controller 응답은 `ResponseEntity.ok(...)` 또는 `ResponseEntity.status(...).body(...)` 형태를 사용한다.
-- 생성자 주입만 사용한다. `@Autowired` 필드 주입 금지.
+- Controller 응답은 `CommonResponse.success()` 또는 `CommonResponse.fail()`을 생성한 뒤, `toResponseEntity()`로 반환한다.
+- Controller에서 `ResponseEntity.ok(...)`, `ResponseEntity.status(...).body(...)`를 직접 사용하지 않는다.
+- 생성자 주입만 사용한다.
 - `@Data`를 Entity에 사용하지 않는다. `@Getter`, `@Builder`만 허용.
 - Entity에는 클래스 레벨 `@Setter`를 사용하지 않는다. 상태 변경은 의미 있는 메서드로 표현한다.
 - 의미 없는 범용 이름(`Util`, `Manager`, `Data`, `Helper`)을 남용하지 않는다.
@@ -105,12 +108,12 @@ Controller → WebSocket Handler → Service → Repository → DB
 
 - 연관관계는 필요한 방향만 매핑한다. 양방향은 신중하게 결정한다.
 - 연관관계 fetch는 기본 LAZY로 둔다. EAGER가 필요하면 근거를 주석으로 남긴다.
-- N+1이 예상되면 fetch join 또는 `@EntityGraph`로 해결한다.
+- N+1이 예상되면 fetch join 으로 해결한다 단, 검색 기능 쪽 문제는 QueryDSL 사용하여 해결한다.
 - 컬렉션을 JSON으로 직접 직렬화하지 않는다. DTO로 변환한다.
 - `equals`/`hashCode`에 변경 가능한 필드나 연관관계를 포함하지 않는다.
 - Soft Delete 대상은 일반 조회 쿼리에서 반드시 제외한다.
   - `WHERE deleted_at IS NULL` 또는 `WHERE is_deleted = false`
-- 복합키 Entity는 `@IdClass` 또는 `@EmbeddedId`로 식별자 클래스를 분리한다.
+- 복합키 Entity는 `@EmbeddedId`로 식별자 클래스를 분리한다.
 
 ---
 
@@ -165,4 +168,3 @@ Controller → WebSocket Handler → Service → Repository → DB
 | API 테스트 | 요청 검증, 응답 DTO, 상태 코드 |
 | Security 테스트 | 인증, 소유권, 채팅 참여자 검증 |
 | 동시성 테스트 | 좋아요 중복, 팔로우 중복, 경매 입찰 |
-

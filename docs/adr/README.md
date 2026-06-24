@@ -18,4 +18,4 @@
 
 | ADR | 내용 |
 |---|---|
-| [ADR-001](ADR-001-auth.md) | JWT Access Token + Redis Refresh Token 인증 |
+| [docs/adr/ADR-001-auth.md](ADR-001-auth.md) | JWT Access Token + Redis Refresh Token 인증 |

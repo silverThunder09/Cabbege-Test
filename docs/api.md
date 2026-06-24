@@ -49,7 +49,6 @@
 | 채팅방 생성 | 채팅 | POST | `/api/items/{itemId}/chat-rooms` |
 | 채팅방 조회 | 채팅 | GET | `/api/chat-rooms` |
 | 채팅방 나가기 | 채팅 | POST | `/api/chat-rooms/{chatRoomId}/leave` |
-| 메시지 목록 조회 | 채팅 | GET | `/api/chat-rooms/{chatRoomId}/messages` |
 | 메시지 전송 | 채팅 | WS | `/api/chat-rooms/{chatRoomId}/messages` |
 | 메시지 삭제 | 채팅 | DELETE | `/api/chat-messages/{messageId}` |
 | 메시지 읽음 처리 | 채팅 | POST | `/api/chat-rooms/{chatRoomId}/read` |
@@ -377,4 +376,4 @@ Notion `DB` 페이지의 API 명세 데이터베이스를 기준으로 정리한
 
 ## 열린 결정
 
-- 채팅 WebSocket destination, 목록 페이징 방식, 이미지 업로드 API 분리는 [adr/README.md](adr/README.md)에서 관리한다.
+- 채팅 WebSocket destination, 목록 페이징 방식, 이미지 업로드 API 분리는 [docs/adr/README.md](adr/README.md)에서 관리한다.
