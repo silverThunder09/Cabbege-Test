@@ -30,6 +30,8 @@ erDiagram
     item |o--|| auctionStatus : open
     client ||--|| auctionStatus : bids
 
+    inquiry |o--|| inquiry : answers
+
     client["CLIENT"] {
         bigint id PK
         varchar email UK
@@ -90,17 +92,17 @@ erDiagram
         datetime created_at
     }
 
-    inquiry["INQUIRY"] {
+    inquiry["INQUIRY_LOG"] {
         bigint id PK
         bigint item_id FK
         bigint author_id FK
-        text question
-        text answer
+        bigint target_inquiry_id FK
+        varchar title
+        text description
         varchar status
-        datetime answered_at
         datetime created_at
         datetime updated_at
-        datetime deleted_at
+        boolean is_deleted
     }
 
     follow["FOLLOW"] {
@@ -164,7 +166,7 @@ erDiagram
 | 인증·회원 | Client |
 | 카테고리 | Category |
 | 상품 | Item, ItemImage, ItemLike, AuctionStatus |
-| 문의 | Inquiry |
+| 문의 | InquiryLog |
 | 팔로우 | Follow |
 | 채팅 | ChatRoom, ChatMember, ChatMessage |
 | 리뷰 | Review |
@@ -177,6 +179,8 @@ erDiagram
 - `item.seller_id`는 `client.id`를 참조한다.
 - `item.category_id`는 `category.id`를 참조한다.
 - `item_like` PK는 `(client_id, item_id)`다.
+- `inquiry_log.target_inquiry_id`는 답변 대상 `inquiry_log.id`를 참조한다.
+- 문의 API의 `contents` 요청 필드는 `inquiry_log.description`에 저장한다.
 - `follow` PK는 `(follower_id, following_id)`다.
 - `chat_member` PK는 `(chat_room_id, client_id)`다.
 - `auction_status.item_id`는 PK이자 `item.id` FK다.
@@ -188,7 +192,7 @@ erDiagram
 |---|---|
 | Client | Soft Delete, `deleted_at` |
 | Item | Soft Delete, `is_deleted` |
-| Inquiry | Soft Delete, `deleted_at` |
+| InquiryLog | Soft Delete, `is_deleted` |
 | ChatMessage | Soft Delete, `deleted_at` |
 | Review | Soft Delete, `deleted_at` |
 | ItemImage | Hard Delete |
