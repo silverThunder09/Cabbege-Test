@@ -34,6 +34,18 @@ com.sparta.cabbagetest
 ```
 
 각 도메인은 필요에 따라 `controller`, `service`, `repository`, `entity`, `dto` 하위 패키지를 둔다.
+Controller와 직접 통신하는 DTO는 `dto/request`, `dto/response`로 분리한다.
+
+```text
+{domain}
+├── controller
+├── service
+├── repository
+├── entity
+└── dto
+    ├── request
+    └── response
+```
 
 ---
 
@@ -59,20 +71,31 @@ Controller → WebSocket Handler → Service → Repository → DB
 
 - Service 메서드는 하나의 유스케이스를 표현한다.
 - Controller에 비즈니스 로직을 두지 않는다.
+- Controller 응답은 `ResponseEntity.ok(...)` 또는 `ResponseEntity.status(...).body(...)` 형태를 사용한다.
 - 생성자 주입만 사용한다. `@Autowired` 필드 주입 금지.
 - `@Data`를 Entity에 사용하지 않는다. `@Getter`, `@Builder`만 허용.
+- Entity에는 클래스 레벨 `@Setter`를 사용하지 않는다. 상태 변경은 의미 있는 메서드로 표현한다.
 - 의미 없는 범용 이름(`Util`, `Manager`, `Data`, `Helper`)을 남용하지 않는다.
+- Java 코드는 Google Java Style을 기본 기준으로 삼는다.
 
 ---
 
 ## DTO·예외
 
 - Request DTO와 Response DTO를 분리한다.
+- Controller와 직접 통신하는 DTO는 `Dto` 접미사를 쓰지 않고 `Request`, `Response`를 사용한다.
+- Request DTO는 `{domain}.dto.request`, Response DTO는 `{domain}.dto.response`에 둔다.
 - Entity를 API 응답으로 직접 반환하지 않는다.
 - Request DTO는 Bean Validation으로 검증한다. `@NotNull`, `@NotBlank`, `@Size` 등.
   - primitive 타입은 `null` 검증이 불가하므로 Wrapper 타입으로 선언하고 `@NotNull`을 적용한다.
   - 예: `long initialPrice` → `Long initialPrice` + `@NotNull @PositiveOrZero`
+- Request DTO 검증 메시지는 한글 문장과 마침표로 통일한다.
+  - 예: `"이메일은 필수입니다."`, `"상품명은 최대 200자까지 입력할 수 있습니다."`
+- Request DTO에는 Entity 변환용 정적 팩토리 메서드를 두지 않는다. Entity 변환은 Service 책임이다.
+- Response DTO는 `from(Entity)` 정적 팩토리 메서드로 생성한다. 인자가 2개 이상이면 `of(...)`도 허용한다.
+- Response DTO 필드는 불변으로 관리하고, null 가능 필드는 필요 시 응답에서 제외한다.
 - 도메인 예외는 `GlobalExceptionHandler`에서 HTTP 응답으로 변환한다.
+- 공통 예외와 공통 응답은 `global` 하위 패키지에서 관리한다.
 - 내부 구현 메시지와 stack trace를 응답에 노출하지 않는다.
 - 오류 응답 형식은 전체 API에서 일관되게 유지한다.
 
@@ -106,10 +129,23 @@ Controller → WebSocket Handler → Service → Repository → DB
 |---|---|---|
 | Java 클래스 | PascalCase | `ItemService`, `ClientRepository` |
 | Java 메서드·필드 | camelCase | `findByEmail`, `likeCount` |
+| 상수·Enum 값 | UPPER_SNAKE_CASE | `ON_SALE`, `MAX_LOGIN_ATTEMPTS` |
+| boolean 필드 | `is~`, `has~` 의미 유지 | `isDeleted`, `hasStock` |
 | DB 테이블·컬럼 | snake_case | `item_like`, `created_at` |
 | API path | kebab-case | `/api/chat-rooms`, `/api/items/{itemId}` |
 | 테스트 메서드 | 한글, 기대 동작 명시 | `이미_가입된_이메일이면_회원가입에_실패한다` |
 | 브랜치 | 소문자·하이픈 | `feature/6-signup` |
+
+| 용도 | 접미사 | 예시 |
+|---|---|---|
+| 생성 요청 | `CreateRequest` | `ItemCreateRequest` |
+| 수정 요청 | `UpdateRequest` | `ClientUpdateRequest` |
+| 부분 수정 요청 | `FieldUpdateRequest` | `ItemStatusUpdateRequest` |
+| 단건 응답 | `Response` | `ClientResponse` |
+| 상세 응답 | `DetailResponse` | `ItemDetailResponse` |
+| 목록 응답 | `ListResponse` | `ReviewListResponse` |
+| 목록 항목 | `ListItemResponse` | `ItemListItemResponse` |
+| 내부 전달용 | `Dto` | `LoginClientDto` |
 
 ---
 
@@ -129,5 +165,4 @@ Controller → WebSocket Handler → Service → Repository → DB
 | API 테스트 | 요청 검증, 응답 DTO, 상태 코드 |
 | Security 테스트 | 인증, 소유권, 채팅 참여자 검증 |
 | 동시성 테스트 | 좋아요 중복, 팔로우 중복, 경매 입찰 |
-
 

@@ -1,7 +1,7 @@
 package com.sparta.cabbagetest.auth.service;
 
-import com.sparta.cabbagetest.auth.dto.SignupRequest;
-import com.sparta.cabbagetest.auth.dto.SignupResponse;
+import com.sparta.cabbagetest.auth.dto.request.SignupRequest;
+import com.sparta.cabbagetest.auth.dto.response.SignupResponse;
 import com.sparta.cabbagetest.auth.exception.DuplicateEmailException;
 import com.sparta.cabbagetest.client.domain.Client;
 import com.sparta.cabbagetest.client.repository.ClientRepository;
@@ -22,16 +22,16 @@ public class AuthService {
 
     @Transactional
     public SignupResponse signup(SignupRequest request) {
-        if (clientRepository.existsByEmail(request.email())) {
+        if (clientRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException();
         }
 
         Client client = Client.create(
-                request.email(),
-                passwordEncoder.encode(request.password()),
-                request.nickname(),
-                request.name(),
-                request.phone()
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getNickname(),
+                request.getName(),
+                request.getPhone()
         );
 
         return SignupResponse.from(clientRepository.save(client));

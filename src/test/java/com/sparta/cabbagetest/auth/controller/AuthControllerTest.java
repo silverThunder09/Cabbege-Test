@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.sparta.cabbagetest.auth.dto.SignupRequest;
+import com.sparta.cabbagetest.auth.dto.request.SignupRequest;
 import com.sparta.cabbagetest.client.domain.Client;
 import com.sparta.cabbagetest.client.repository.ClientRepository;
 import org.junit.jupiter.api.AfterEach;

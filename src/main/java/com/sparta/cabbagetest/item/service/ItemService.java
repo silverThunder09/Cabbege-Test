@@ -5,8 +5,8 @@ import com.sparta.cabbagetest.category.repository.CategoryRepository;
 import com.sparta.cabbagetest.client.domain.Client;
 import com.sparta.cabbagetest.client.repository.ClientRepository;
 import com.sparta.cabbagetest.item.domain.Item;
-import com.sparta.cabbagetest.item.dto.ItemCreateRequest;
-import com.sparta.cabbagetest.item.dto.ItemCreateResponse;
+import com.sparta.cabbagetest.item.dto.request.ItemCreateRequest;
+import com.sparta.cabbagetest.item.dto.response.ItemCreateResponse;
 import com.sparta.cabbagetest.item.exception.CategoryNotFoundException;
 import com.sparta.cabbagetest.item.exception.SellerNotFoundException;
 import com.sparta.cabbagetest.item.repository.ItemRepository;
@@ -34,17 +34,17 @@ public class ItemService {
     public ItemCreateResponse createItem(String sellerEmail, ItemCreateRequest request) {
         Client seller = clientRepository.findByEmail(sellerEmail)
                 .orElseThrow(SellerNotFoundException::new);
-        Category category = categoryRepository.findById(request.categoryId())
+        Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(CategoryNotFoundException::new);
 
         Item item = Item.create(
                 seller,
                 category,
-                request.tradeType(),
-                request.title(),
-                request.description(),
-                request.initialPrice(),
-                request.conditionType()
+                request.getTradeType(),
+                request.getTitle(),
+                request.getDescription(),
+                request.getInitialPrice(),
+                request.getConditionType()
         );
 
         return ItemCreateResponse.from(itemRepository.save(item));

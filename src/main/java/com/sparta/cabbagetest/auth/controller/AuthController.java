@@ -1,7 +1,7 @@
 package com.sparta.cabbagetest.auth.controller;
 
-import com.sparta.cabbagetest.auth.dto.SignupRequest;
-import com.sparta.cabbagetest.auth.dto.SignupResponse;
+import com.sparta.cabbagetest.auth.dto.request.SignupRequest;
+import com.sparta.cabbagetest.auth.dto.response.SignupResponse;
 import com.sparta.cabbagetest.auth.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

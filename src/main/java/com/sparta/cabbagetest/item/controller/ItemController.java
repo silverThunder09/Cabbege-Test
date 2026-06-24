@@ -1,7 +1,7 @@
 package com.sparta.cabbagetest.item.controller;
 
-import com.sparta.cabbagetest.item.dto.ItemCreateRequest;
-import com.sparta.cabbagetest.item.dto.ItemCreateResponse;
+import com.sparta.cabbagetest.item.dto.request.ItemCreateRequest;
+import com.sparta.cabbagetest.item.dto.response.ItemCreateResponse;
 import com.sparta.cabbagetest.item.service.ItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
