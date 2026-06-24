@@ -2,6 +2,8 @@
 
 ## 인증
 
+> 인증 방식 결정 상세: [ADR-001](adr/ADR-001-auth.md)
+
 - 회원가입, 로그인, 공개 조회를 제외한 API는 인증을 요구한다.
 - 비밀번호는 Spring Security `PasswordEncoder`로 단방향 해시한다.
 - 인증 방식은 JWT를 사용한다.

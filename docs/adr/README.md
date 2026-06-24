@@ -16,27 +16,6 @@
 
 ## 확정된 결정
 
-| 결정 | 내용 |
+| ADR | 내용 |
 |---|---|
-| 인증 방식 | JWT |
-| Access Token | API 인증에 사용 |
-| Refresh Token 저장소 | Redis |
-| 로그인 응답 | `accessToken`, `refreshToken`, `tokenType`, `expiresIn` |
-| 토큰 재발급 API | `POST /api/auth/refresh` |
-| 로그아웃 | Redis의 Refresh Token 삭제 또는 무효화 |
-
-## 형식
-
-```text
-# ADR-{번호}: 제목
-
-## 상태
-
-Proposed | Accepted | Deprecated
-
-## 배경
-
-## 결정
-
-## 결과
-```
+| [ADR-001](ADR-001-auth.md) | JWT Access Token + Redis Refresh Token 인증 |

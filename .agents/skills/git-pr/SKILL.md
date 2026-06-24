@@ -1,8 +1,7 @@
 ---
 name: git-pr
 description: |
-  현재 브랜치의 변경사항을 기준 브랜치와 비교해 PR 본문, GitHub Issue 초안,
-  또는 PR 생성 전 점검 결과를 작성한다.
+  현재 브랜치의 변경사항을 기준 브랜치와 비교해 PR 본문 또는 GitHub Issue 초안을 작성한다.
   트리거: "PR 해줘", "PR 만들어줘", "PR 본문 써줘", "이슈 초안 써줘", "$git-pr"
 ---
 
@@ -16,10 +15,11 @@ description: |
 ## 입력
 
 ```text
-$git-pr <review|draft-pr|create-pr|issue> base=<branch>
+$git-pr <draft-pr|create-pr|issue> base=<branch>
 ```
 
 기본값: `base` 없으면 `develop`, `develop` 없으면 `dev`, `dev` 없으면 `main`. mode 없으면 `draft-pr`.
+코드 리뷰는 `/review`를 사용한다. `$git-pr`은 PR 본문과 이슈 작성에만 사용한다.
 
 ## 절차
 
@@ -32,7 +32,6 @@ git diff --stat <base>...HEAD
 ```
 
 관련 이슈가 있으면 `gh issue view <number>`로 Goal, Scope, Acceptance Criteria만 확인한다.
-기술 결정과 관련된 기능이면 Notes의 `docs/adr/README.md` 포함 여부도 확인한다.
 
 ### 2단계 — diff 읽기
 
@@ -47,22 +46,6 @@ git diff --unified=10 <base>...HEAD -- <file>
 mode에 따라 아래 형식으로 작성한다.
 
 ## mode별 산출물
-
-### review — PR 전 점검
-
-```markdown
-## 점검 결과
-
-- 문제 없음 또는 발견 사항
-
-## 위험 요소
-
-- 없으면 "없음"
-
-## 테스트
-
-- 실행 명령 또는 미실행 이유
-```
 
 ### draft-pr — PR 본문 초안
 
