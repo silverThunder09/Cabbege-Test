@@ -188,7 +188,7 @@ erDiagram
 
 ## Deletion policies
 
-| Entity        | 정책                         |
+| Entity        | Policies                   |
 |---------------|----------------------------|
 | Client        | Soft Delete, `deleted_at`  |
 | Item          | Soft Delete, `is_deleted`  |
